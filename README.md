@@ -1,9 +1,9 @@
-# ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System
+# Project - Oil Spill Detection System with Synthetic Data Generation Pipeline and Dynamic Perceiver Architecture model 🌊🛢️
 
-## Project - Oil Spill Detection System with Synthetic Data Generation Pipeline and Dynamic Perceiver Architecture model 
-
-
-# Oil Spill Detection System 🌊🛢️
+- Project Group - 20
+- Student - Sweta Pattnaik
+- Student ID - A0296537M
+- Department - AIS FT 06 batch, ISS, NUS, Singapore
 
 ## 📌 Project Overview  
 This project aims to develop an **AI-based Oil Spill Detection System** using **Synthetic Aperture Radar (SAR) images**. The system enhances oil spill detection accuracy by leveraging **synthetic data generation** and the **Dynamic Perceiver architecture** for efficient image analysis.
