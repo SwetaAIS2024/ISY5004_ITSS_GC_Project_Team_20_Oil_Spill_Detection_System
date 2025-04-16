@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 from tqdm import tqdm
 import seaborn as sns
 
-DATASET_PATH = 'dataset_pipeline/original_dataset_CSIRO/'
+DATASET_PATH = '/Users/swetapattnaik/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/dataset_pipeline/original_dataset_CSIRO/'
 CLASSES = ['0', '1']
 
 def analze_dataset():
