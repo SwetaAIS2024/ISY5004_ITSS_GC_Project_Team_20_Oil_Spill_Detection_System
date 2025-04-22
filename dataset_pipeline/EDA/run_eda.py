@@ -1,12 +1,13 @@
-from ccdpm_trainer import cDDPMTrainer
+from dataset_eda import EDAdataset
 
 original_dataset_path = '/Users/swetapattnaik/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/dataset_pipeline/original_dataset_CSIRO/'
 synthetic_dataset_path = '/Users/swetapattnaik/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/dataset_pipeline/synthetic_dataset_pipeline/synthetic_dataset/'
 
-trainer = cDDPMTrainer(original_dataset_path)
-trainer.train()
-trainer.save_model()
-
-# Generate synthetic images (e.g., 10 oil spill, 10 no-oil)
-trainer.generate_samples(num_samples=10, label=1, output_dir=synthetic_dataset_path)
-trainer.generate_samples(num_samples=10, label=0, output_dir=synthetic_dataset_path)
+original_eda = EDAdataset(original_dataset_path, eda_output_dir='dataset_eda/original_dataset')
+synthetic_eda = EDAdataset(synthetic_dataset_path, eda_output_dir='dataset_eda/synthetic_dataset')
+# original_eda.analyse_dataset()
+# synthetic_eda.analyse_dataset()
+# original_eda.plot_stats()
+# synthetic_eda.plot_stats()
+# original_eda.show_sample_images()
+# synthetic_eda.show_sample_images()

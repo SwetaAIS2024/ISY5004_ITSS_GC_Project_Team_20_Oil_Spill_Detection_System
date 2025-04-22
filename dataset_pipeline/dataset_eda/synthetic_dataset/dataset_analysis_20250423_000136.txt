@@ -1,0 +1,49 @@
+Logging to file:  dataset_eda/synthetic_dataset/dataset_analysis_20250423_000136.txt
+Analyzing dataset at :  /Users/swetapattnaik/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/dataset_pipeline/original_dataset_CSIRO/
+
+Analysis complete. Results stored in `self.eda_stats`.
+Analyzing dataset at :  /Users/swetapattnaik/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/dataset_pipeline/synthetic_dataset_pipeline/synthetic_dataset/
+
+Analysis complete. Results stored in `self.eda_stats`.
+Plotting stats for dataset at :  /Users/swetapattnaik/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/dataset_pipeline/original_dataset_CSIRO/
+
+Class: 0
+Images: 3725
+Corrupted: 0
+Shapes: {(400, 400)}
+Mean: 0.5397
+Std: 0.1102
+Min: 0.1874
+Max: 0.8430
+
+Class: 1
+Images: 1905
+Corrupted: 0
+Shapes: {(400, 400)}
+Mean: 0.4780
+Std: 0.0567
+Min: 0.1566
+Max: 0.6581
+Plotting stats for dataset at :  /Users/swetapattnaik/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/dataset_pipeline/synthetic_dataset_pipeline/synthetic_dataset/
+
+Class: 0
+Images: 10
+Corrupted: 0
+Shapes: {(400, 400)}
+Mean: 0.2285
+Std: 0.1220
+Min: 0.0000
+Max: 1.0000
+
+Class: 1
+Images: 10
+Corrupted: 0
+Shapes: {(400, 400)}
+Mean: 0.2424
+Std: 0.1092
+Min: 0.0000
+Max: 1.0000
+Showing sample images for dataset at : /Users/swetapattnaik/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/dataset_pipeline/original_dataset_CSIRO/
+Saved sample grid to: dataset_eda/original_dataset/sample_images_grid.png
+Showing sample images for dataset at : /Users/swetapattnaik/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/dataset_pipeline/synthetic_dataset_pipeline/synthetic_dataset/
+Saved sample grid to: dataset_eda/synthetic_dataset/sample_images_grid.png
