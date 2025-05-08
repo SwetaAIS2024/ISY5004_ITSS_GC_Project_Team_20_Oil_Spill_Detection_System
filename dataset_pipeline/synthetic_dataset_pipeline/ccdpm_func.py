@@ -7,6 +7,8 @@ from PIL import Image
 import numpy as np
 from tqdm import tqdm
 from torchvision.utils import save_image
+from torchsummary import summary
+import contextlib
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -38,22 +40,62 @@ class ConditionalUNet(nn.Module):
     def __init__(self, num_classes):
         super().__init__()
         self.label_emb = nn.Embedding(num_classes, 32)
-        self.encoder = nn.Sequential(
-            nn.Conv2d(1 + 32, 32, 3, padding=1),
-            nn.ReLU(),
-            nn.Conv2d(32, 32, 3, padding=1),
+
+        # Encoder
+        self.enc1 = nn.Sequential(
+            nn.Conv2d(1 + 32, 64, 3, padding=1),
+            nn.GroupNorm(8, 64),
             nn.ReLU()
         )
-        self.decoder = nn.Sequential(
-            nn.Conv2d(32, 32, 3, padding=1),
-            nn.ReLU(),
-            nn.Conv2d(32, 1, 3, padding=1)
+        self.enc2 = nn.Sequential(
+            nn.Conv2d(64, 128, 3, stride=2, padding=1),  # Downsample
+            nn.GroupNorm(8, 128),
+            nn.ReLU()
         )
 
+        # Bottleneck
+        self.bottleneck = nn.Sequential(
+            nn.Conv2d(128, 256, 3, padding=1),
+            nn.GroupNorm(8, 256),
+            nn.ReLU()
+        )
+
+        # Decoder
+        self.up1 = nn.Sequential(
+            nn.Conv2d(256, 128, 3, padding=1),
+            nn.GroupNorm(8, 128),
+            nn.ReLU()
+        )
+        self.upconv1 = nn.ConvTranspose2d(128, 128, kernel_size=2, stride=2)  # Upsample
+
+        self.up2 = nn.Sequential(
+            nn.Conv2d(128 + 64, 64, 3, padding=1),
+            nn.GroupNorm(8, 64),
+            nn.ReLU()
+        )
+        self.final = nn.Conv2d(64, 1, kernel_size=1)
+
     def forward(self, x, y):
+        # Embed class label and broadcast to match image shape
         y_emb = self.label_emb(y).unsqueeze(2).unsqueeze(3).expand(-1, -1, x.size(2), x.size(3))
-        x = torch.cat([x, y_emb], dim=1)
-        return self.decoder(self.encoder(x))
+        x = torch.cat([x, y_emb], dim=1)  # Shape: [B, 1+32, H, W]
+
+        # Encoder
+        x1 = self.enc1(x)         # [B, 64, H, W]
+        x2 = self.enc2(x1)        # [B, 128, H/2, W/2]
+
+        # Bottleneck
+        x3 = self.bottleneck(x2)  # [B, 256, H/2, W/2]
+
+        # Decoder
+        x4 = self.up1(x3)         # [B, 128, H/2, W/2]
+        x4 = self.upconv1(x4)     # [B, 128, H, W]
+
+        # Skip connection
+        x = torch.cat([x4, x1], dim=1)  # [B, 192, H, W]
+        x = self.up2(x)                # [B, 64, H, W]
+
+        return self.final(x)           # [B, 1, H, W]
 
 
 class DiffusionScheduler:
@@ -105,6 +147,15 @@ class cDDPMTrainer:
         torch.save(self.model.state_dict(), path)
         print(f"Model saved to {path}")
 
+    def model_summary(self):    
+        summary(self.model, input_size=(1, 400, 400))  # (channels, height, width)
+        # Also save to file
+        with open("model_architecture.txt", "w") as f:
+            with contextlib.redirect_stdout(f):
+                summary(self.model, input_size=(1, self.image_size, self.image_size))
+        # Save raw structure
+        with open("model_structure_layers.txt", "w") as f:
+            print(self.model, file=f)
 
     def generate_samples(self, num_samples=5, label=1, output_dir="synthetic_dataset"):
         out_dir_label = os.path.join(output_dir, str(label))

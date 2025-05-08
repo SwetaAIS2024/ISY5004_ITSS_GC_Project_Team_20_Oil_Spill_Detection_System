@@ -1,0 +1,6 @@
+FID for class 0 (no-oil): 14.7523
+FID for class 1 (oil): 13.5412
+Run at 2025-04-23 09:43:43:
+FID for class 0 (no-oil): 14.7523
+FID for class 1 (oil): 13.5412
+
