@@ -3,3 +3,6 @@ pillow
 matplotlib
 seaborn
 tqdm
+
+ultralytics
+einops
