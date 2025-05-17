@@ -1,9 +1,15 @@
 # inference_utils.py
+import sys
+import os
 import torch
 import cv2
 import numpy as np
 import time
 from torchvision import transforms
+
+# Add the project root to Python path
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.append(ROOT_DIR)
 from dynamic_perceiver_model_pipeline.perceiver_module import PerceiverClassifier
 from dynamic_perceiver_model_pipeline.backbone_module_yolo import YOLOBackbone
 

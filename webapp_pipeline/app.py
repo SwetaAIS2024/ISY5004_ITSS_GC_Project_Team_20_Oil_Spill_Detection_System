@@ -1,4 +1,9 @@
 # app.py
+# Add the project root to Python path
+import sys
+import os
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.append(ROOT_DIR)
 import streamlit as st
 import cv2
 import numpy as np
@@ -16,7 +21,7 @@ if uploaded_file:
     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
     image = cv2.imdecode(file_bytes, 1)
 
-    st.image(image, caption="Uploaded SAR Image", use_column_width=True)
+    st.image(image, caption="Uploaded SAR Image", use_container_width=True)
 
     # Load models
     with st.spinner("Loading models..."):
