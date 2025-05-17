@@ -1,11 +1,12 @@
-1. ** Web UI ** 
-- Upload SAR image
-- Trigger backend API
-2. ** Backend API (Flask / FastAPI) **
-- Loads yolov8n.pt (for region proposals)
-- Loads perceiver.pt (for classification)
-- Runs detection and classification
-- Returns prediction results with bounding boxes
-3. ** Frontend **
-- Displays image with detected oil spill areas
-- Shows labels (spill / non-spill) and confidence scores
+Workflow
+Upload SAR image
+Run YOLOv8 detection to extract patches
+Load each of the 3 trained Perceiver models
+Run inference on the patches
+Measure and display:
+Inference time
+Predicted labels
+Model confidence (softmax probs)
+Accuracy / recall if ground truth is known (optional)
+Overlay predictions on image
+Display all results side by side

@@ -6,3 +6,8 @@ tqdm
 
 ultralytics
 einops
+
+streamlit
+opencv-python
+torch
+torchvision
