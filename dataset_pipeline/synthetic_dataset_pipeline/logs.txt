@@ -1,0 +1,21 @@
+Found 3725 images in label 0
+Copied 500 images to subset_dataset/0
+Found 1905 images in label 1
+Copied 500 images to subset_dataset/1
+Done creating subset dataset.
+
+
+
+swetapattnaik@Swetas-MacBook-Air-2 synthetic_dataset_pipeline % python cddpm_trainer.py
+Found 3725 images in label 0
+Copied 500 images to subset_dataset/0
+Found 1905 images in label 1
+Copied 500 images to subset_dataset/1
+Done creating subset dataset.
+Epoch 1/2:   0%|                                                                                  | 0/1145 [00:00<?, ?it/s]/Users/swetapattnaik/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/dataset_pipeline/synthetic_dataset_pipeline/ccdpm_func.py:153: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  imgs, labels = imgs.to(device), torch.tensor(labels).to(device)
+Epoch 1/2: 100%|█████████████████████████████████████████████████████████████████████| 1145/1145 [1:29:04<00:00,  4.67s/it]
+Epoch 1 Loss: 0.3265
+Epoch 2/2: 100%|█████████████████████████████████████████████████████████████████████| 1145/1145 [1:22:09<00:00,  4.30s/it]
+Epoch 2 Loss: 0.0993
+Model saved to cddpm_sar_model.pt

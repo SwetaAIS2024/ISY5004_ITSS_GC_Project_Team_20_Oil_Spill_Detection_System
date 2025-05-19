@@ -1,15 +1,17 @@
+
 import os
 import torch
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
 from PIL import Image
-from perceiver_module import PerceiverClassifier
-from backbone_module_yolo import YOLOBackbone
+
+from cnn_pretrain_module import pretrain_cnn
 from training_module import train_model
-from eval import evaluate_model
+from eval import evaluate_multiple_models, display_results
+
 
 # ---------------------------
-# Dummy Dataset Loader Class
+# Dataset Loader
 # ---------------------------
 class SARImagePatchDataset(Dataset):
     def __init__(self, data_dir):
@@ -19,11 +21,15 @@ class SARImagePatchDataset(Dataset):
             transforms.Resize((64, 64)),
             transforms.ToTensor()
         ])
+
         for label in os.listdir(data_dir):
             label_path = os.path.join(data_dir, label)
+            if not os.path.isdir(label_path):
+                continue
             for file in os.listdir(label_path):
-                self.data.append(os.path.join(label_path, file))
-                self.labels.append(int(label))  # assumes folder name = class index
+                if file.lower().endswith(('.png', '.jpg', '.jpeg')):
+                    self.data.append(os.path.join(label_path, file))
+                    self.labels.append(int(label))
 
     def __len__(self):
         return len(self.data)
@@ -36,44 +42,37 @@ class SARImagePatchDataset(Dataset):
         return img, label
 
 # ---------------------------
-# Run Pipeline
+# Run Full Pipeline
 # ---------------------------
 if __name__ == '__main__':
-    # --- Step 1: Detection and Cropping ---
-#     image_path = 'sample_sar_image.jpg'
-#     yolo = YOLOBackbone(model_path='yolov8n.pt')
-#     crops, boxes = yolo.detect_and_crop(image_path)
-#     print(f"Detected {len(crops)} regions from {image_path}")
+    # --- Load datasets ---
+    print("Loading datasets...")
+    original_dataset = SARImagePatchDataset('data/original/')
+    synthetic_dataset = SARImagePatchDataset('data/synthetic/')
+    combined_dataset = SARImagePatchDataset('data/combined/')
 
-    # --- Step 2: Load Datasets ---
-    original_dataset = SARImagePatchDataset('/Users/swetapattnaik/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/dynamic_perceiver_model_pipeline/data/original/')
-    synthetic_dataset = SARImagePatchDataset('/Users/swetapattnaik/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/dynamic_perceiver_model_pipeline/data/synthetic/')
-    combined_dataset = SARImagePatchDataset('/Users/swetapattnaik/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/dynamic_perceiver_model_pipeline/data/combined/')
+#    --- Pretrain CNN on combined SAR patches ---
+#    already done
+    print("\nPretraining CNN backbone on combined dataset...")
+    pretrain_cnn(combined_dataset, epochs=10, lr=1e-4, save_path="mobilenet_sar.pt")
 
-    # --- Step 3: Train Model ---
-    print("Training Perceiver on original dataset...")
-    train_model(original_dataset, epochs=100, lr=1e-4, save_path='perceiver_original.pt')
-    print("Training Perceiver on synthetic dataset...")
-    train_model(synthetic_dataset, epochs=100, lr=1e-4, save_path='perceiver_synthetic.pt')
-    print("Training Perceiver on combined dataset...")
-    train_model(combined_dataset, epochs=100, lr=1e-4, save_path='perceiver_combined.pt')
+#this part done 
+#     # --- Train CNN + Perceiver ---
+    print("\nTraining CNN+Perceiver on original dataset...")
+    train_model(original_dataset, epochs=10, lr=1e-4, save_path='perceiver_original.pt')
 
-    # --- Step 4: Evaluate Model ---
-    print("Evaluating Perceiver on original dataset...")
-    evaluate_model(original_dataset, model_path='perceiver_original.pt', dataset_type='original')
-    print("Evaluating Perceiver on synthetic dataset...")
-    evaluate_model(synthetic_dataset, model_path='perceiver_synthetic.pt', dataset_type='synthetic')
-    print("Evaluating Perceiver on combined dataset...")
-    evaluate_model(combined_dataset, model_path='perceiver_combined.pt', dataset_type='combined')
+    print("\nTraining CNN+Perceiver on synthetic dataset...")
+    train_model(synthetic_dataset, epochs=10, lr=1e-4, save_path='perceiver_synthetic.pt')
 
-#     # --- Step 5: Inference on New Crops ---
-#     model = PerceiverClassifier()
-#     model.load_state_dict(torch.load('perceiver.pt'))
-#     model.eval()
+    print("\nTraining CNN+Perceiver on combined dataset...")
+    train_model(combined_dataset, epochs=10, lr=1e-4, save_path='perceiver_combined.pt')
 
-#     for idx, crop in enumerate(crops):
-#         crop = crop.unsqueeze(0)  # Add batch dim
-#         with torch.no_grad():
-#             pred = model(crop)
-#             class_id = torch.argmax(pred).item()
-#             print(f"Crop {idx+1}: Predicted class {class_id}")
+
+model_paths = {
+    "Original": "perceiver_original.pt",
+    "Synthetic": "perceiver_synthetic.pt",
+    "Combined": "perceiver_combined.pt"
+}
+
+results = evaluate_multiple_models(test_dataset=combined_dataset, model_paths=model_paths)
+display_results(results)

@@ -1,49 +1,50 @@
-# app.py
-# Add the project root to Python path
 import sys
 import os
+import streamlit as st
+import torch
+from PIL import Image
+import numpy as np
+
+# Set root path so imports work
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(ROOT_DIR)
-import streamlit as st
-import cv2
-import numpy as np
-from inference_utils import (
-    load_model, run_inference, draw_boxes
-)
 
-st.set_page_config(page_title="Oil Spill Detection Comparator", layout="wide")
-st.title("Oil Spill Detection using YOLO + Perceiver Models")
+from inference_utils import load_model, run_inference
 
-uploaded_file = st.file_uploader("Upload a SAR image", type=["jpg", "png", "jpeg"])
+# Streamlit setup
+st.set_page_config(page_title="Oil Spill Detection", layout="wide")
+st.title("Oil Spill Detection using CNN + Perceiver")
+
+# Upload SAR image
+uploaded_file = st.file_uploader("Upload a SAR image (JPEG/PNG)", type=["jpg", "jpeg", "png"])
+
+# Load models (cached)
+@st.cache_resource
+def load_all_models():
+    models = {}
+    for name, path in {
+#         "Original": "perceiver_original.pt",
+#         "Synthetic": "perceiver_synthetic.pt",
+        "Combined": "perceiver_combined.pt"
+    }.items():
+        model = load_model(path)
+        models[name] = model
+    return models
 
 if uploaded_file:
-    # Convert uploaded image to OpenCV format
-    file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
-    image = cv2.imdecode(file_bytes, 1)
-
+    image = Image.open(uploaded_file).convert("RGB")
     st.image(image, caption="Uploaded SAR Image", use_container_width=True)
 
-    # Load models
-    with st.spinner("Loading models..."):
-        model_org = load_model("/Users/swetapattnaik/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/dynamic_perceiver_model_pipeline/perceiver_original.pt")
-        model_syn = load_model("/Users/swetapattnaik/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/dynamic_perceiver_model_pipeline/perceiver_synthetic.pt")
-        model_com = load_model("/Users/swetapattnaik/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/ISY5004_ITSS_GC_Project_Team_20_Oil_Spill_Detection_System/dynamic_perceiver_model_pipeline/perceiver_combined.pt")
+    st.subheader("Inference Results")
 
-    # Inference
-    st.subheader("Model Inference Results")
+    models = load_all_models()
+    cols = st.columns(len(models))
 
-    cols = st.columns(3)
-    models = [("Original", model_org, (255, 0, 0)), 
-              ("Synthetic", model_syn, (0, 255, 0)), 
-              ("Combined", model_com, (0, 0, 255))]
-
-    for i, (name, model, color) in enumerate(models):
+    for i, (name, model) in enumerate(models.items()):
         with cols[i]:
             st.markdown(f"### {name} Model")
-            preds, confs, boxes, t = run_inference(image, model)
-            img_result = draw_boxes(image, boxes, preds, confs, color)
-            st.image(img_result, caption=f"{name} Predictions", use_column_width=True)
-            st.write(f"**Inference Time:** {t:.2f} sec")
-            st.write(f"**Num Patches:** {len(preds)}")
-            st.write(f"**Predictions:** {preds}")
-            st.write(f"**Confidences:** {[round(c, 2) for c in confs]}")
+            pred, conf, elapsed = run_inference(image, model)
+            label = "Oil Spill" if pred == 1 else "Non-Spill"
+            st.write(f"Prediction   : **{label}**")
+            st.write(f"Confidence   : **{conf:.2f}**")
+            st.write(f"Inference Time: **{elapsed:.3f} sec**")

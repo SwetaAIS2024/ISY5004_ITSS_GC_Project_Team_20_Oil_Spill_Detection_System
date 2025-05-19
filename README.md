@@ -25,7 +25,7 @@ This project aims to develop an **AI-based Oil Spill Detection System** using **
    - Acquire real SAR images  
    - Generate synthetic SAR images  
 2. **Model Training**
-   - Train **YOLOv4** as a baseline  
+   - Train **mobilenet_v3_small** as a baseline  
    - Implement **Dynamic Perceiver** for improved accuracy  
    - Evaluate performance using **IoU, Precision, Recall, FID**  
 3. **Web-Based System**
@@ -38,12 +38,9 @@ This project aims to develop an **AI-based Oil Spill Detection System** using **
 The detailed project proposal is included in the repository:  
 [📄 ISY5004_ITSS_GC_project_proposal.pptx](ISY5004_ITSS_GC_project_proposal_team_20_Sweta_Pattnaik.pptx)  
 
-## 🔧 Installation & Usage  
-### Clone the Repository  
-```bash
-git clone https://github.com/your-username/oil-spill-detection.git
-cd oil-spill-detection
-```
+## 📜 Overall Report   
+The detailed project report is included in the repository:  
+[📄 ISY5004_ITSS_GC_project_report_team_20_Sweta_Pattnaik.pdf](ISY5004_ITSS_GC_project_report_team_20_Sweta_Pattnaik.pdf) 
 
 ## 📚 References  
 

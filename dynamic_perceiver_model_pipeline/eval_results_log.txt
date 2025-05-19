@@ -1,0 +1,78 @@
+Downloading: "https://download.pytorch.org/models/mobilenet_v3_small-047dcff4.pth" to /Users/swetapattnaik/.cache/torch/hub/checkpoints/mobilenet_v3_small-047dcff4.pth
+100%|█████████████████████████████████████████████████████████████████████████████████| 9.83M/9.83M [00:00<00:00, 36.1MB/s]
+Epoch 1, Loss: 0.5087
+Epoch 2, Loss: 0.3797
+Epoch 3, Loss: 0.3259
+Epoch 4, Loss: 0.3011
+Epoch 5, Loss: 0.2691
+Epoch 6, Loss: 0.2447
+Epoch 7, Loss: 0.2253
+Epoch 8, Loss: 0.2131
+Epoch 9, Loss: 0.1898
+Epoch 10, Loss: 0.1852
+Saved CNN to mobilenet_sar.pt -> backbone of perceiver 
+
+
+swetapattnaik@Swetas-MacBook-Air-2 dynamic_perceiver_model_pipeline % python main.py
+Loading datasets...
+
+Training CNN+Perceiver on original dataset...
+/opt/homebrew/lib/python3.13/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/opt/homebrew/lib/python3.13/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=None`.
+  warnings.warn(msg)
+Epoch 1, Loss: 0.1812
+Epoch 2, Loss: 0.1445
+Epoch 3, Loss: 0.1435
+Epoch 4, Loss: 0.1420
+Epoch 5, Loss: 0.1375
+Epoch 6, Loss: 0.1445
+Epoch 7, Loss: 0.1275
+Epoch 8, Loss: 0.1268
+Epoch 9, Loss: 0.1337
+Epoch 10, Loss: 0.1379
+Model saved to perceiver_original.pt
+
+Training CNN+Perceiver on synthetic dataset...
+Epoch 1, Loss: 0.6682
+Epoch 2, Loss: 0.5097
+Epoch 3, Loss: 0.4406
+Epoch 4, Loss: 0.3955
+Epoch 5, Loss: 0.3980
+Epoch 6, Loss: 0.3698
+Epoch 7, Loss: 0.3481
+Epoch 8, Loss: 0.4157
+Epoch 9, Loss: 0.2940
+Epoch 10, Loss: 0.2860
+Model saved to perceiver_synthetic.pt
+
+Training CNN+Perceiver on combined dataset...
+Epoch 1, Loss: 0.2243
+Epoch 2, Loss: 0.1931
+Epoch 3, Loss: 0.1786
+Epoch 4, Loss: 0.1788
+Epoch 5, Loss: 0.1728
+Epoch 6, Loss: 0.1637
+Epoch 7, Loss: 0.1664
+Epoch 8, Loss: 0.1657
+Epoch 9, Loss: 0.1677
+Epoch 10, Loss: 0.1746
+Model saved to perceiver_combined.pt
+
+Model: Original
+Accuracy : 95.39%
+Precision: 0.93
+Recall   : 0.94
+F1-Score : 0.93
+
+Model: Synthetic
+Accuracy : 47.05%
+Precision: 0.34
+Recall   : 0.53
+F1-Score : 0.41
+
+Model: Combined
+Accuracy : 95.51%
+Precision: 0.91
+Recall   : 0.97
+F1-Score : 0.94

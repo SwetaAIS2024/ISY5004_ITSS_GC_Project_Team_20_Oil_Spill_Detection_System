@@ -2,10 +2,10 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
-from perceiver_module import PerceiverClassifier
+from cnn_perceiver_module import CNNPerceiverClassifier
 
-def train_model(train_dataset, epochs=10, lr=1e-4, save_path='perceiver.pt'):
-    model = PerceiverClassifier()
+def train_model(train_dataset, epochs=10, lr=1e-4, save_path='cnn_perceiver.pt'):
+    model = CNNPerceiverClassifier(cnn_weights='mobilenet_sar.pt')
     dataloader = DataLoader(train_dataset, batch_size=8, shuffle=True)
     optimizer = optim.Adam(model.parameters(), lr=lr)
     criterion = nn.CrossEntropyLoss()

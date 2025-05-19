@@ -1,6 +1,6 @@
 dynamic_perceiver_model_pipeline/
-├── perceiver_module.py      # Dynamic Perceiver classifier
-├── backbone_module_yolo.py       # YOLOv8-based region detection & cropping
+├── cnn_perceiver_module.py      # Dynamic Perceiver classifier
+├── cnn_pretrain_module.py       # mobilenet_v3_small 
 ├── training_module.py       # Training logic for Perceiver
 ├── eval.py                  # Accuracy evaluation on datasets
 ├── main.py                  # Full pipeline: detect, train, evaluate, infer
@@ -21,8 +21,4 @@ data/
 ├── combined/
 │   ├── 0/
 │   └── 1/
-
-# running the script:
-
-# output of this folder is a perceiver.pt file (for classification)
 
