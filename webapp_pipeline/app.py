@@ -27,6 +27,7 @@ def load_all_models():
 #         "Synthetic": "perceiver_synthetic.pt",
         "Perceiver": "perceiver_combined.pt"
     }.items():
+        
         model = load_model(path)
         models[name] = model
     return models
