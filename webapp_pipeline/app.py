@@ -13,7 +13,7 @@ from inference_utils import load_model, run_inference
 
 # Streamlit setup
 st.set_page_config(page_title="Oil Spill Detection", layout="wide")
-st.title("Oil Spill Detection using CNN + Perceiver")
+st.title("Oil Spill Detection using Dynamic Perceiver Model trained on SAR Images")
 
 # Upload SAR image
 uploaded_file = st.file_uploader("Upload a SAR image (JPEG/PNG)", type=["jpg", "jpeg", "png"])
@@ -25,7 +25,7 @@ def load_all_models():
     for name, path in {
 #         "Original": "perceiver_original.pt",
 #         "Synthetic": "perceiver_synthetic.pt",
-        "Combined": "perceiver_combined.pt"
+        "Perceiver": "perceiver_combined.pt"
     }.items():
         model = load_model(path)
         models[name] = model
@@ -33,7 +33,8 @@ def load_all_models():
 
 if uploaded_file:
     image = Image.open(uploaded_file).convert("RGB")
-    st.image(image, caption="Uploaded SAR Image", use_container_width=True)
+    #st.image(image, caption="Uploaded SAR Image", use_container_width=True)
+    st.image(image, caption="Uploaded SAR Image", width=300)
 
     st.subheader("Inference Results")
 

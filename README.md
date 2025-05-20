@@ -71,4 +71,5 @@ The detailed project report is included in the repository:
 
 
 
-
+## Disclaimer 
+- CHATGPT and other AI tools WERE used in this project.
